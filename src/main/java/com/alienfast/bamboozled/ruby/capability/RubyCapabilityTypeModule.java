@@ -95,7 +95,13 @@ public class RubyCapabilityTypeModule extends AbstractExecutableCapabilityTypeMo
         final String labelString = params.get( FIELD_RUBY_LABEL )[0].trim();
         final RubyLabel rubyLabel = RubyLabel.fromString( labelString );
         // transform the path so that it works properly
-        final String path = BambooFilenameUtils.stripTrailingSlashes( params.get( FIELD_RUBY_PATH )[0].trim() );
+        
+        // This only works for Bamboo API 5.9+
+        //final String path = BambooFilenameUtils.stripTrailingSlashes( params.get( FIELD_RUBY_PATH )[0].trim() );
+        String path = params.get( FIELD_RUBY_PATH )[0].trim();
+        while (path.length() > 0 && path.charAt(path.length()-1) == '/') {
+            path = path.substring(0, path.length()-1);
+        }
 
         return new CapabilityImpl( rubyLabel.toCapabilityKey(), path );
     }
